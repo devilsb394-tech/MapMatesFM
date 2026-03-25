@@ -1,0 +1,5 @@
+{
+  "name": "MAPMATES",
+  "description": "A modern advanced map-based social entertainment web application for real-time connections and chat.",
+  "requestFramePermissions": ["camera", "geolocation"]
+}

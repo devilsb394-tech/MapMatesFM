@@ -1,0 +1,145 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the MAPMATES platform.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "username": { "type": "string", "description": "Unique username" },
+        "email": { "type": "string", "description": "User email" },
+        "photoURL": { "type": "string", "description": "Profile picture URL" },
+        "bio": { "type": "string", "description": "User biography" },
+        "gender": { "type": "string", "description": "User gender" },
+        "religion": { "type": "string", "description": "User religion" },
+        "language": { "type": "string", "description": "User language" },
+        "age": { "type": "number", "description": "User age" },
+        "relationshipStatus": { "type": "string", "description": "Married or not" },
+        "profession": { "type": "string", "description": "User profession" },
+        "economicClass": { "type": "string", "description": "Rich / middle / poor" },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" },
+            "lastUpdated": { "type": "string", "format": "date-time" }
+          }
+        },
+        "isOnline": { "type": "boolean" },
+        "lastSeen": { "type": "string", "format": "date-time" },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "views": { "type": "number" },
+            "likes": { "type": "number" },
+            "friendsCount": { "type": "number" }
+          }
+        }
+      },
+      "required": ["uid", "username", "email"]
+    },
+    "FriendRequest": {
+      "title": "FriendRequest",
+      "description": "A request to connect between two users.",
+      "type": "object",
+      "properties": {
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected"] },
+        "friendshipType": { "type": "string" },
+        "closeness": { "type": "number" },
+        "attractiveness": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A chat message between users.",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "receiverId": { "type": "string" },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "read": { "type": "boolean" }
+      }
+    },
+    "Rating": {
+      "title": "Rating",
+      "description": "User rating for another user.",
+      "type": "object",
+      "properties": {
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "personality": { "type": "number" },
+        "friendliness": { "type": "number" },
+        "attractiveness": { "type": "number" },
+        "trustLevel": { "type": "number" }
+      }
+    },
+    "History": {
+      "title": "History",
+      "description": "User activity history.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "type": { "type": "string", "enum": ["search", "view"] },
+        "targetId": { "type": "string" },
+        "query": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "A chat conversation between two users.",
+      "type": "object",
+      "properties": {
+        "participants": { "type": "array", "items": { "type": "string" } },
+        "lastMessage": { "type": "string" },
+        "lastMessageTimestamp": { "type": "string", "format": "date-time" },
+        "lastMessageSenderId": { "type": "string" },
+        "unreadCount": { "type": "object" }
+      }
+    },
+    "SocialAction": {
+      "title": "SocialAction",
+      "description": "A view or like action.",
+      "type": "object",
+      "properties": {
+        "fromId": { "type": "string" },
+        "toId": { "type": "string" },
+        "type": { "type": "string", "enum": ["view", "like"] },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "A notification for a user.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Recipient UID" },
+        "fromId": { "type": "string", "description": "Sender UID" },
+        "fromName": { "type": "string" },
+        "fromPhoto": { "type": "string" },
+        "type": { "type": "string", "enum": ["message", "friend_request", "like"] },
+        "text": { "type": "string" },
+        "chatId": { "type": "string" },
+        "read": { "type": "boolean" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{uid}": { "schema": "User", "description": "User profiles" },
+    "/users/{uid}/views/{viewId}": { "schema": "SocialAction", "description": "Profile viewers" },
+    "/users/{uid}/likes/{likeId}": { "schema": "SocialAction", "description": "Profile likers" },
+    "/users/{uid}/friends/{friendId}": { "schema": "SocialAction", "description": "Friend list" },
+    "/friendRequests/{requestId}": { "schema": "FriendRequest", "description": "Friend requests" },
+    "/conversations/{convId}": { "schema": "Conversation", "description": "Chat conversations" },
+    "/conversations/{convId}/messages/{messageId}": { "schema": "Message", "description": "Chat messages" },
+    "/ratings/{ratingId}": { "schema": "Rating", "description": "User ratings" },
+    "/history/{historyId}": { "schema": "History", "description": "User activity history" },
+    "/notifications/{notifId}": { "schema": "Notification", "description": "User notifications" },
+    "/socialActions/{actionId}": { "schema": "SocialAction", "description": "Profile views and likes" }
+  }
+}
